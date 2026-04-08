@@ -62,7 +62,7 @@ public class SpendingTrackerController {
     }
     @DeleteMapping("/delete/{date}")
     public ResponseEntity<String> deleteTransaction(
-            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date)
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
     {
         //If the transaction with the specified date cannot be found then let user know
         if(!(spendingTrackerRepo.findByDate(date).isPresent())) {
