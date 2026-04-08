@@ -72,7 +72,10 @@ import java.util.Optional;
             BigDecimal percentChange = calculatePercentChange(totalAssets, previousTotalAssets);
 
             spendingTracker entity = new spendingTracker();
-            if(dto.getDate() != null ) entity.setDate(dto.getDate());
+            /* If the date is not specified, it defaults to today */
+            if(dto.getDate() != null ) {
+                entity.setDate(dto.getDate());
+            }
             entity.setIncome(nullSafe(dto.getIncome()));
             entity.setStartOfDayBalance(startOfDayBalance);
             entity.setColdCash(nullSafe(dto.getColdCash()));
@@ -190,7 +193,12 @@ import java.util.Optional;
             logger.error("Error editing transaction: ", e);
         }
     }
-
+    public void deleteTransaction(LocalDate date) {
+        spendingTracker entity = spendingTrackerRepo.findByDate(date)
+                .orElseThrow(() -> new RuntimeException("Transaction not found with date: " + date));
+        spendingTrackerRepo.delete(entity);
+        logger.info("Successfully deleted transaction with date: " + date);
+    }
     // ===================== PRIVATE HELPERS =====================
     private void calculateAllTransactionsAfterSpecificEntry(spendingTracker spendingTracker) {
         List<spendingTracker> entryList = spendingTrackerRepo.findByDateAfter(spendingTracker.getDate());

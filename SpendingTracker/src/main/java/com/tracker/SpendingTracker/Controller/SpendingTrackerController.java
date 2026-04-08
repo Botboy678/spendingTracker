@@ -26,11 +26,10 @@ public class SpendingTrackerController {
 
     @PutMapping("/add")
     public ResponseEntity<String> addDailyTransaction(@RequestBody SpendingTrackerDTO spendingTrackerDTO) {
-        Optional<spendingTracker> duplicateDate = spendingTrackerRepo.findByDate(spendingTrackerDTO.getDate());
-        if(!duplicateDate.isEmpty()) {
+        if(duplicateDateEntries(spendingTrackerDTO.getDate())) {
             logger.error("Duplicate date entries not allowed!");
             return new ResponseEntity<>("Duplicate Date Entries Not Allowed!", HttpStatus.CONFLICT);
-        }
+        };
         spendingTrackerServices.addDailyTransaction(spendingTrackerDTO);
         logger.info("Successfully called spendingTrackerServices Method");
         return new ResponseEntity<>("Successfully Added Transactions", HttpStatus.ACCEPTED);
@@ -61,5 +60,23 @@ public class SpendingTrackerController {
         if (dtoList.isEmpty()) return new ResponseEntity<>(dtoList, HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
+    @DeleteMapping("/delete/{date}")
+    public ResponseEntity<String> deleteTransaction(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date)
+    {
+        //If the transaction with the specified date cannot be found then let user know
+        if(!(spendingTrackerRepo.findByDate(date).isPresent())) {
+            logger.error("A transaction with the date: " + date + " doesn't exist!");
+            return new ResponseEntity<>("Transaction not found for date: " + date, HttpStatus.OK);
+        }
+        spendingTrackerServices.deleteTransaction(date);
+        return new ResponseEntity<>("Successfully deleted transaction with date: " + date, HttpStatus.OK);
+    }
 
+    /*----------- Private Helpers (Mostly for repeating logic) ---------------*/
+    private boolean duplicateDateEntries(LocalDate date) {
+        Optional<spendingTracker> duplicateDate = spendingTrackerRepo.findByDate(date);
+        if(!duplicateDate.isEmpty()) return true;
+        else return false;
+    }
 }
