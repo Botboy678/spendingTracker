@@ -1,6 +1,8 @@
 package com.tracker.SpendingTracker.Controller;
 
 import com.tracker.SpendingTracker.DTO.SpendingTrackerDTO;
+import com.tracker.SpendingTracker.Models.spendingTracker;
+import com.tracker.SpendingTracker.Repo.SpendingTrackerRepo;
 import com.tracker.SpendingTracker.Services.SpendingTrackerServices;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,16 +14,23 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/spendingTracker")
 @RequiredArgsConstructor
 public class SpendingTrackerController {
     private final SpendingTrackerServices spendingTrackerServices;
+    private final SpendingTrackerRepo spendingTrackerRepo;
     private static final Logger logger = LoggerFactory.getLogger(SpendingTrackerController.class);
 
     @PutMapping("/add")
     public ResponseEntity<String> addDailyTransaction(@RequestBody SpendingTrackerDTO spendingTrackerDTO) {
+        Optional<spendingTracker> duplicateDate = spendingTrackerRepo.findByDate(spendingTrackerDTO.getDate());
+        if(!duplicateDate.isEmpty()) {
+            logger.error("Duplicate date entries not allowed!");
+            return new ResponseEntity<>("Duplicate Date Entries Not Allowed!", HttpStatus.CONFLICT);
+        }
         spendingTrackerServices.addDailyTransaction(spendingTrackerDTO);
         logger.info("Successfully called spendingTrackerServices Method");
         return new ResponseEntity<>("Successfully Added Transactions", HttpStatus.ACCEPTED);

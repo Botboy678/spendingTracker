@@ -72,7 +72,7 @@ import java.util.Optional;
             BigDecimal percentChange = calculatePercentChange(totalAssets, previousTotalAssets);
 
             spendingTracker entity = new spendingTracker();
-            entity.setDate(dto.getDate());
+            if(dto.getDate() != null ) entity.setDate(dto.getDate());
             entity.setIncome(nullSafe(dto.getIncome()));
             entity.setStartOfDayBalance(startOfDayBalance);
             entity.setColdCash(nullSafe(dto.getColdCash()));

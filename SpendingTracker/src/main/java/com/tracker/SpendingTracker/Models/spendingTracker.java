@@ -20,7 +20,7 @@ public class spendingTracker {
             name = "Date",
             nullable = false
     )
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
 
     @Column(columnDefinition = "NUMERIC(19,2) DEFAULT 0.00", precision = 19, scale = 2)
     private BigDecimal income;
