@@ -1,0 +1,47 @@
+.navbar-title {
+    font-family: "Press Start 2P", system-ui;
+    font-size: medium !important;
+    color: green !important;
+}
+
+.add-entry {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.add-entry-btn-wrapper {
+    position: relative;
+    width: 112px;
+    height: 35px;
+}
+
+.add-entry-btn-img {
+    width: 110px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.add-entry-btn-img-highlited {
+    width: 112px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+}
+
+.add-entry:active .add-entry-btn-img {
+    visibility: hidden;
+}
+
+.add-entry:active .add-entry-btn-img-highlited {
+    visibility: visible;
+}
+
+@media(max-width: 550px) {
+    .navbar-title{
+        display: none;
+    }
+}

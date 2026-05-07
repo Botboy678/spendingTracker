@@ -19,12 +19,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/v1/spendingTracker")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class SpendingTrackerController {
     private final SpendingTrackerServices spendingTrackerServices;
     private final SpendingTrackerRepo spendingTrackerRepo;
     private static final Logger logger = LoggerFactory.getLogger(SpendingTrackerController.class);
 
-    @PutMapping("/add")
+    @PostMapping("/add")
     public ResponseEntity<String> addDailyTransaction(@RequestBody SpendingTrackerDTO spendingTrackerDTO) {
         if(duplicateDateEntries(spendingTrackerDTO.getDate())) {
             logger.error("Duplicate date entries not allowed!");
