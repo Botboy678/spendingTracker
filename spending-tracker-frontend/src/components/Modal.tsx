@@ -7,12 +7,15 @@ const BASE_URL = 'http://localhost:8080/api/v1/spendingTracker'
 
 function Modal({ onClose }: { onClose: () => void }) {
     const [entries, setEntries] = useState<Entry[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchEntries = async () => {
-            const response = await fetch(`${BASE_URL}/all`)
+            setIsLoading(true);
+            const response = await fetch(`${BASE_URL}/all`);
             const entries = await response.json() as Entry[];
             setEntries(entries);
+            setIsLoading(false);
         }
         fetchEntries();
     }, [])
@@ -36,6 +39,8 @@ function Modal({ onClose }: { onClose: () => void }) {
         "Percent Change"
     ];
 
+    const lastEntry = entries[entries.length - 1];
+
     return <>
         <div className="modal fade show d-block" tabIndex={-1}>
             <div className="modal-dialog modal-fullscreen">
@@ -45,8 +50,12 @@ function Modal({ onClose }: { onClose: () => void }) {
                         <button className="btn-close" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
-                        <AssetSummary totalAssets={0} endOfDayBal={0} percentChange={0}
-                            RobinHoodBal={0} />
+                        <AssetSummary
+                            totalAssets={lastEntry?.totalAssets}
+                            endOfDayBal={lastEntry?.endOfDayBalance}
+                            percentChange={lastEntry?.percentChange}
+                            RobinHoodBal={lastEntry?.robinHood}
+                            isLoading={isLoading} />
                         <Table titles={titles} entries={entries} />
                     </div>
                 </div>

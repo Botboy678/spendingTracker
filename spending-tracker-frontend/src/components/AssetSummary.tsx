@@ -5,9 +5,9 @@ interface props {
     endOfDayBal: number
     RobinHoodBal: number
     percentChange: number
+    isLoading: boolean
 }
-function AssetSummary({ totalAssets, endOfDayBal, RobinHoodBal, percentChange }: props) {
-    const [isLoading, setIsLoading] = useState(false);
+function AssetSummary({ totalAssets, endOfDayBal, RobinHoodBal, percentChange, isLoading }: props) {
     const placeHolder: ReactNode =
         <div className="col-12 col-lg-3 col-sm-6 mb-2 pe-2 placeholder-glow">
             <div className="placeholder rounded w-100" style={{ height: '75px' }}>
