@@ -3,9 +3,11 @@ import type { Entry } from "../interfaces/Entry"
 interface props {
   titles: string[]
   entries: Entry[]
+  onEditClick: () => void
+  onDeleteClick?: () => void
 }
 
-function Table({ titles, entries }: props) {
+function Table({ titles, entries, onEditClick, onDeleteClick }: props) {
   return <>
     <div className="table-responsive m-3 rounded">
       <table className="table table-dark table-striped table-hover">
@@ -22,6 +24,10 @@ function Table({ titles, entries }: props) {
               {Object.values(entry).map((value, i) => (
                 <td key={i}>{value}</td>
               ))}
+              <td className="d-flex gap-1">
+                <button onClick={onEditClick}>edit</button>
+                <button onClick={onDeleteClick}>delete</button>
+              </td>
             </tr>
           })}
         </tbody>

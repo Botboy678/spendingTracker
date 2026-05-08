@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AssetSummary from "./AssetSummary";
 import Table from "./Table";
 import type { Entry } from "../interfaces/Entry";
+import ModalForm from "./ModalForm";
 
 const BASE_URL = 'http://localhost:8080/api/v1/spendingTracker'
 
@@ -40,6 +41,7 @@ function Modal({ onClose }: { onClose: () => void }) {
     ];
 
     const lastEntry = entries[entries.length - 1];
+    const [showModalForm, setShowModalForm] = useState(false);
 
     return <>
         <div className="modal fade show d-block" tabIndex={-1}>
@@ -56,8 +58,9 @@ function Modal({ onClose }: { onClose: () => void }) {
                             percentChange={lastEntry?.percentChange}
                             RobinHoodBal={lastEntry?.robinHood}
                             isLoading={isLoading} />
-                        <Table titles={titles} entries={entries} />
+                        <Table titles={titles} entries={entries} onEditClick={() => setShowModalForm(true)} onDeleteClick={() => { }} />
                     </div>
+                    {showModalForm && <ModalForm onClose={() => setShowModalForm(false)} />}
                 </div>
             </div>
         </div>
