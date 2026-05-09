@@ -9,6 +9,7 @@ const BASE_URL = 'http://localhost:8080/api/v1/spendingTracker'
 function Modal({ onClose }: { onClose: () => void }) {
     const [entries, setEntries] = useState<Entry[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [preFilledFormData, setPreFilledFormData] = useState<Entry>();
 
     useEffect(() => {
         const fetchEntries = async () => {
@@ -41,6 +42,9 @@ function Modal({ onClose }: { onClose: () => void }) {
     ];
 
     const lastEntry = entries[entries.length - 1];
+    const handlePreFilledFormData = (entry: Entry) => {
+        setPreFilledFormData(entry);
+    }
     const [showModalForm, setShowModalForm] = useState(false);
 
     return <>
@@ -58,9 +62,18 @@ function Modal({ onClose }: { onClose: () => void }) {
                             percentChange={lastEntry?.percentChange}
                             RobinHoodBal={lastEntry?.robinHood}
                             isLoading={isLoading} />
-                        <Table titles={titles} entries={entries} onEditClick={() => setShowModalForm(true)} onDeleteClick={() => { }} />
+
+                        <Table
+                            titles={titles}
+                            entries={entries}
+                            getFormDataEntry={handlePreFilledFormData}
+                            onEditClick={() => setShowModalForm(true)}
+                            onDeleteClick={() => { }} />
                     </div>
-                    {showModalForm && <ModalForm onClose={() => setShowModalForm(false)} />}
+                    {showModalForm && <ModalForm
+                        onClose={() => setShowModalForm(false)}
+                        entry={preFilledFormData}
+                    />}
                 </div>
             </div>
         </div>

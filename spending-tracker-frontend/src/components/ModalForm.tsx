@@ -2,10 +2,34 @@ import type { Entry } from "../interfaces/Entry";
 import GenericModal from "./GenericModal";
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { useState } from "react";
-const BASE_URL = 'http://localhost:8080/api/v1/spendingTracker'
 
-function ModalForm({ onClose }: { onClose: () => void }) {
-    const { register, handleSubmit, formState: { errors } } = useForm<Entry>();
+const BASE_URL = 'http://localhost:8080/api/v1/spendingTracker'
+interface props {
+    onClose: () => void
+    entry?: Entry
+}
+
+async function handleResponse(response: Response, setShowToast: (show: boolean) => void, setToastMessage: (message: string) => void) {
+    if (response.ok) {
+        const message = await response.text();
+        console.log(message);
+        setShowToast(true);
+        setToastMessage(message);
+    }
+    else if (response.status === 409) {
+        const error = await response.text();
+        console.log(error);
+        setShowToast(true);
+        setToastMessage(error);
+    }
+    else {
+        console.log("Something Went Wrong! ", response.status)
+    }
+}
+function ModalForm({ onClose, entry }: props) {
+    const { register, handleSubmit, formState: { errors } } = useForm<Entry>({
+        defaultValues: entry
+    })
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
 
@@ -33,29 +57,28 @@ function ModalForm({ onClose }: { onClose: () => void }) {
             body: JSON.stringify(entry)
         });
 
-        if (response.ok) {
-            const message = await response.text();
-            console.log(message);
-            setShowToast(true);
-            setToastMessage(message);
-        }
-        else if (response.status === 409) {
-            const error = await response.text();
-            console.log(error);
-            setShowToast(true);
-            setToastMessage(error);
-        }
-        else {
-            console.log("Something Went Wrong! ", response.status)
-        }
+        await handleResponse(response, setShowToast, setToastMessage);
     }
+
+    const putEntry = async (entry: Entry) => {
+        const response = await fetch(`${BASE_URL}/edit/date/${entry.date}`, {
+            method: "PATCH",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(entry)
+        });
+        await handleResponse(response, setShowToast, setToastMessage);
+    }
+
     const onSubmit: SubmitHandler<Entry> = (data: Entry) => {
-        postEntry(data);
+        if (entry) {
+            putEntry(data);
+        }
+        else postEntry(data);
         console.log(data);
     }
     return <>
         <GenericModal
-            title="Add Entry"
+            title={entry ? "Edit Entry" : "Add New Entry"}
             onClose={onClose}
             body={
                 <>
