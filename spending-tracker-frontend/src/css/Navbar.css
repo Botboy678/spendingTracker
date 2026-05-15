@@ -1,6 +1,6 @@
 .navbar-title {
-    font-family: "Press Start 2P", system-ui;
-    font-size: medium !important;
+    font-family: playfair display, serif !important;
+    font-size: 24px !important;
     color: green !important;
 }
 
@@ -19,26 +19,11 @@
 
 .add-entry-btn-img {
     width: 110px;
-    position: absolute;
     top: 0;
     left: 0;
 }
 
-.add-entry-btn-img-highlited {
-    width: 112px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    visibility: hidden;
-}
 
-.add-entry:active .add-entry-btn-img {
-    visibility: hidden;
-}
-
-.add-entry:active .add-entry-btn-img-highlited {
-    visibility: visible;
-}
 
 @media(max-width: 550px) {
     .navbar-title{
