@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../css/Navbar.css"
 import ModalForm from "./Modals/ModalForm";
 import { AnimatePresence, motion } from "framer-motion";
+import { NavbarIcon } from "../assets/icons/Icons";
 
 function Navbar({ userName }: { userName: string }) {
     const [showModalForm, setShowModalForm] = useState(false);
@@ -9,21 +10,17 @@ function Navbar({ userName }: { userName: string }) {
     return (
         <nav className="navbar">
             {/* Left side */}
-            <a className="navbar-brand navbar-title mb-0" href="#">
-                <img
-                    src="src/assets/spendingTrackNavImg.svg"
-                    alt="Logo"
-                    width="30"
-                    height="24"
-                    className="d-inline-block me-2 align-middle"
-                />
+            <a className="navbar-brand navbar-title mb-0 " href="#">
+                <span className="me-2">
+                    <NavbarIcon size={30} color="#1a6e1a" />
+                </span>
                 {userName}'s Spending Tracker
             </a>
 
             {/* Right side */}
             <div className="ms-auto">
                 <motion.button
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.5 }}
                     whileTap={{ scale: 0.95 }}
                     className="add-entry" onClick={() => setShowModalForm(true)}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Vectors-Pen-Add-1--Streamline-Freehand" height="24" width="24">
