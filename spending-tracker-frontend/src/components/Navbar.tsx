@@ -10,7 +10,7 @@ function Navbar({ userName }: { userName: string }) {
     return (
         <nav className="navbar">
             {/* Left side */}
-            <a className="navbar-brand navbar-title mb-0 " href="#">
+            <a className="navbar-brand navbar-title m-0" href="#">
                 <span className="me-2">
                     <NavbarIcon size={30} color="#1a6e1a" />
                 </span>
@@ -18,7 +18,7 @@ function Navbar({ userName }: { userName: string }) {
             </a>
 
             {/* Right side */}
-            <div className="ms-auto">
+            <div className="ms-2">
                 <motion.button
                     whileHover={{ scale: 1.5 }}
                     whileTap={{ scale: 0.95 }}
